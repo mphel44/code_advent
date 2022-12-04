@@ -5,7 +5,6 @@ FS.readFile('inputs/inputday4', 'utf-8', (err, data) => {
         let sections = line.split(/[-,]+/) 
         if ((Number(sections[0]) >= Number(sections[2]) && Number(sections[1]) <= Number(sections[3])) ||
             (Number(sections[0]) <= Number(sections[2]) && Number(sections[1]) >= Number(sections[3]))) {
-            console.log(sections)
             pairs ++ 
         }
     })
