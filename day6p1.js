@@ -3,11 +3,9 @@ const FS = require('fs')
 
 const formattedInput = FS.readFileSync('inputs/inputday6', { encoding: 'utf-8'}).trim()
 for (let index = 0; index < formattedInput.split('').length; index++) {
-    let traitement = formattedInput.substring(index, index+4)
     let present = false 
-    traitement.split('').forEach((char) => {
-        let compa = traitement.replace(char, '') 
-        if (compa.includes(char)){
+    formattedInput.substring(index, index+4).split('').forEach((char) => {
+        if (formattedInput.substring(index, index+4).replace(char, '').includes(char)){
             present = true
         }
     })
