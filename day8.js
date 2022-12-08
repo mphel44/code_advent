@@ -11,66 +11,98 @@ data.replace(/(\r)/gm,'').split('\n').forEach((line, y) => {
         forest[y][x] = tree ;
     })
 })
-console.log(forest)
-console.log("LARGEUR => " + forest[0].length)
-console.log("HAUTEUR => " + forest.length)
+const LARGEUR = (forest[0].length)
+const HAUTEUR = forest.length
 
 
-let exteriorVisibleTrees = ((forest.length * 2)-4) + (forest[0].length*2)
+let exteriorVisibleTrees = ((HAUTEUR * 2)-4) + (LARGEUR*2)
 
 let interiorVisibleTrees = []
+let maxScenicScore = 1 ;
+let maxX
+let maxY
 data.replace(/(\r)/gm,'').split('\n').forEach((line, y) => {
     line.split('').forEach((tree, x) => {
- 
-
-        //CHECK SUR LA DROITE 
-        if (x>0 && x<(forest[0].length-1) && y>0 && y<(forest.length-1)) {
-
-            let visible = true 
-            console.log('nouvelle ligne')
-
-            for (let i = x; i<forest[0].length-x; i++) {
+        let visibleRight = true
+        let visibleLeft = true
+        let visibleDown = true
+        let visibleUp = true
+        let scenicScore = 1 
+        if ((x > 0 && x < (LARGEUR-1)) && (y > 0 && y < (HAUTEUR-1))) {         
+            //CHECK SUR LA DROITE 
+            for (let i = x+1; i< LARGEUR ; i++) {
+                //console.log('(x=' + x + ', y=' + y +') qui vaut ' + tree + ' son voisin de droite vaut ' + forest[y][i])
                 if (tree <= forest[y][i]) {
-                    //console.log('Arbre DROITE [' + y + '][' + x + '] plus petit que' + forest[y][i])
-                    visible = false ;
-                }
+                    //console.log('(' + x + ',' + y +') qui vaut ' + tree + 
+                    //' est PAS visible sur la DROITE face à ' + forest[y][i])
+                    visibleRight = false 
+                    scenicScore = scenicScore * (i - x)
+                    break
+                } 
             }
     
             //CHECK SUR LA GAUCHE 
-            for (let i = x; i>=0 ; i--) {
+            for (let i = x-1; i>=0 ; i--) {
                 if (tree <= forest[y][i]) {
-                    //console.log(tree)
-                    //console.log('Arbre GAUCHE [' + y + '][' + x + ']')
-                    visible = false ;
+                    //console.log('(' + x + ',' + y +') qui vaut ' + tree + ' n\'est pas visible sur la GAUCHE à cause de ' + forest[y][i])
+                    visibleLeft = false 
+                    scenicScore = scenicScore * (x - i)
+                    break
                 }
             }
         
 
             //CHECK VERS LE BAS 
-            for (let i = y; i<forest.length-y; i++) {
+            for (let i=y+1; i<HAUTEUR; i++) {
                 if (tree <= forest[i][x]) {
-                    //console.log('Arbre BAS [' + y + '][' + x + ']')
-                    visible = false ;
+                    //console.log('(' + x + ',' + y +') qui vaut ' + tree + 
+                    //' n\'est pas visible sur le BAS à cause de ' + forest[i][x] + '(' + y + ',' + i +')')
+                    visibleDown = false 
+                    scenicScore = scenicScore * (i-y)
+                    break
                 }
             }
             //CHECK SUR LE HAUT 
-            for (let i = y; i>=0 ; i--) {
+            for (let i=y-1; i>=0 ; i--) {
                 if (tree <= forest[i][x]) {
-                    //console.log('Arbre HAUT [' + y + '][' + x + ']')
-                    visible = false ;
+                    //console.log('(' + x + ',' + y +') qui vaut ' + tree + 
+                    //' n\'est pas visible sur le HAUT à cause de ' + forest[i][x] + '(' + y + ',' + i +')')
+                    visibleUp = false 
+                    scenicScore = scenicScore * (y-i)
+                    break
                 }
             }
 
-            if (visible) {
-                console.log('arbre[' + y + '][' + x + '] est visible de lexterieur')
+            if (visibleRight) {
+                scenicScore = scenicScore * (LARGEUR-1 - x)
+            }
+            if (visibleLeft) {
+                scenicScore = scenicScore * x
+            }
+            if (visibleDown) {
+                scenicScore = scenicScore * (HAUTEUR-1 - y)
+            }
+            if (visibleUp) {
+                scenicScore = scenicScore * (y)
+            }
+
+
+            if (visibleRight || visibleLeft || visibleDown || visibleUp) {
                 interiorVisibleTrees.push(tree)
             }
+ 
         }
 
-
+        if (maxScenicScore < scenicScore) {
+            maxScenicScore = scenicScore
+            maxX = x
+            maxY = y
+        }
     })
 })
 
-console.log('arbres les plus grands :')
-console.log(interiorVisibleTrees.length)
+//console.log('arbres les plus grands :')
 let visibleTrees = exteriorVisibleTrees + interiorVisibleTrees.length
+console.log('Il y a ' + visibleTrees + ' arbres visibles depuis l\'extérieur')
+console.log('Le scenic score le plus élevé est de ' + maxScenicScore)
+console.log('Il s\'agit de l\'arbre situé en (' + maxX + ',' + maxY + ') de valeur de ' + forest[maxY][maxX])
