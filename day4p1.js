@@ -1,5 +1,5 @@
 const FS = require('fs')
-FS.readFile('inputs/inputday4', 'utf-8', (err, data) => {
+FS.readFile('inputs/inputday4.txt', 'utf-8', (err, data) => {
     let pairs = 0
     data.split('\n').forEach(line => {
         let sections = line.split(/[-,]+/) 
