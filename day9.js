@@ -12,6 +12,13 @@ gride.push([x,y])
 
 data.replace(/(\r)/gm,'').split('\n').forEach(line => {
     let directionData = line.split(' ')
+    const DISTANCE = directionData[1]
+    
+    for (let i = 0; i < directionData; i++) {
+        const element = array[i];
+        
+    }
+    
     switch (directionData[0]) {
         case 'R' :
         case 'L' :
