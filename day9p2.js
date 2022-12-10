@@ -96,8 +96,6 @@ data.replace(/(\r)/gm,'').split('\n').forEach(line => {
             } 
         }  
     }
-
- 
 })
 
 //result
