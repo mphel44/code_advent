@@ -18,16 +18,7 @@ listeCoordoonnées.push(new coordinate(1,6))
 let hasCoord = listeCoordoonnées.some( coord => (coord.x == 1 && coord.y == 1 ) )
 
 
-let positions = "position"
-
-for (let index = 0; index < 10; index++) {
-    positions.concat(index) = index
-    console.log(positions.concat(index))
-}
-
-
-str1.concat(' ', str2)
-
+console.log(Math.sqrt(9))
 
 
 
