@@ -73,17 +73,15 @@ function jouerRound() {
     monkeys.forEach(monkey => {
         //detainedObjet(monkey) 
         let items = monkey.holdingItems        
-        let loops = items.length
-        let index = 0 
-        for (let j = 0; j < loops ; j++) {
+        while (monkey.holdingItems.length >0) {
             monkey.inspected ++ 
-            let item = items[index]
+            let item = items[0]
             if (!isNaN(monkey.operation.value)) {
                 item.worryLevel = monkey.operation.operator(BigInt(monkey.operation.value), BigInt(item.worryLevel))
             } else {
                 item.worryLevel = monkey.operation.operator(BigInt(item.worryLevel), BigInt(item.worryLevel))
             }
-            console.log(item.worryLevel)
+            //console.log(item.worryLevel)
             //testcheck
             if (BigInt(item.worryLevel) % BigInt(monkey.test) == 0) {
                 monkeys[monkey.trueThrowing].holdingItems.push(item)
