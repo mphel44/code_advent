@@ -73,11 +73,9 @@ function jouerRound() {
     monkeys.forEach(monkey => {
         //detainedObjet(monkey) 
         let items = monkey.holdingItems        
-        let loops = items.length
-        let index = 0 
-        for (let j = 0; j < loops ; j++) {
+        while (monkey.holdingItems.length > 0) {
             monkey.inspected ++ 
-            let item = items[index]
+            let item = items[0]
             if (!isNaN(monkey.operation.value)) {
                 item.worryLevel = monkey.operation.operator(Number(monkey.operation.value), item.worryLevel)
             } else {

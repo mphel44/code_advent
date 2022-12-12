@@ -2,7 +2,7 @@ const FS = require('fs')
 const data = FS.readFileSync('inputs/inputday11.txt', { encoding: 'utf-8'}).trim()
 let monkeys = []
 const MONKEYTURN = data.replace(/(\r)/gm,'').split('\n\n')
-const ENDGAME = 20
+const ENDGAME = 10000
 
 //CLASSES
 class Monkey {
@@ -36,11 +36,17 @@ MONKEYTURN.forEach(turn => {
     objetMaker(actions)
 })
 
+let prod = BigInt(1)
+for (let mnk of monkeys) {
+    prod = prod * mnk.test;
+}
 
 for (let i = 0; i < ENDGAME ; i++) {
     jouerRound() ;
 }
 resultat()
+
+
 
 //METHODES 
 
@@ -58,7 +64,7 @@ function objetMaker(round){
     //monkey operation
     let opline = round[2].split(' ')
     let operator = opline[6] == '+' ? function(a,b) { return a+b} : function(a,b) { return a*b}
-    let operation = new Operation(operator, opline[7]) 
+    let operation = new Operation(operator, opline[7])
     //monkey test
     let test = BigInt(round[3].split(' ')[5])
     //monkey throwing
@@ -77,19 +83,20 @@ function jouerRound() {
             monkey.inspected ++ 
             let item = items[0]
             if (!isNaN(monkey.operation.value)) {
-                item.worryLevel = monkey.operation.operator(BigInt(monkey.operation.value), BigInt(item.worryLevel))
+                item.worryLevel = monkey.operation.operator(BigInt(monkey.operation.value), item.worryLevel)
             } else {
-                item.worryLevel = monkey.operation.operator(BigInt(item.worryLevel), BigInt(item.worryLevel))
+                item.worryLevel = monkey.operation.operator(item.worryLevel, item.worryLevel)
             }
-            //console.log(item.worryLevel)
-            //testcheck
-            if (BigInt(item.worryLevel) % BigInt(monkey.test) == 0) {
+            item.worryLevel %= BigInt(prod) 
+
+            if (item.worryLevel % monkey.test == 0) {
                 monkeys[monkey.trueThrowing].holdingItems.push(item)
                 monkey.holdingItems.shift()
             } else {
                 monkeys[monkey.falseThrowing].holdingItems.push(item)
                 monkey.holdingItems.shift()
             }
+
         }
 
     })
